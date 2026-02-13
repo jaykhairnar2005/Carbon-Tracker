@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import API_BASE from '../config';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +14,7 @@ const Login = () => {
         e.preventDefault();
         setError('');
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            // const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             const response = await fetch(`${API_BASE}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

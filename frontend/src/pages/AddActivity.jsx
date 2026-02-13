@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Save, ArrowLeft } from 'lucide-react';
+import API_BASE from '../config';
 
 const AddActivity = () => {
     const navigate = useNavigate();
@@ -37,7 +38,7 @@ const AddActivity = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+            // const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             await axios.post(`${API_BASE}/api/activities`, formData);
             navigate('/');
         } catch (error) {

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Leaf, Activity } from 'lucide-react';
 import axios from 'axios';
+import API_BASE from '../config';
 
 const Dashboard = () => {
     const [activities, setActivities] = useState([]);
@@ -18,7 +19,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+                // const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
                 const res = await axios.get(`${API_BASE}/api/activities`);
                 setActivities(res.data);
                 const total = res.data.reduce((acc, curr) => acc + curr.carbonEmission, 0);

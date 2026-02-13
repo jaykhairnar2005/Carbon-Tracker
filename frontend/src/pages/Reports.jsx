@@ -4,6 +4,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import API_BASE from '../config';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -23,7 +24,7 @@ const Reports = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:3000`;
+                // const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:3000`;
                 const res = await axios.get(`${API_BASE}/api/activities`);
                 processData(res.data);
             } catch (error) {
