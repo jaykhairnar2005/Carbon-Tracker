@@ -13,6 +13,10 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.send('Carbon Tracker Backend is Running!');
+});
+
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
 
 // Middleware to authenticate token
