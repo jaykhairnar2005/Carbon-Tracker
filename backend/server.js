@@ -1,4 +1,3 @@
-
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,7 +9,15 @@ const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+/* CORS FIX */
+app.use(cors({
+  origin: [
+    "https://carbontracker-7mvoyvcaf-jay-khairnars-projects.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
@@ -37,24 +44,14 @@ app.use('/auth', authRoutes);
 
 // Carbon Calculation Constants
 const CARBON_RATES = {
-  transport: {
-    car: 0.12,  // kg per km
-    bike: 0.05, // kg per km
-  },
-  electricity: {
-    default: 0.82 // kg per unit (kWh)
-  },
-  food: {
-    veg: 1.5,   // kg per meal
-    nonveg: 3.0 // kg per meal
-  }
+  transport: { car: 0.12, bike: 0.05 },
+  electricity: { default: 0.82 },
+  food: { veg: 1.5, nonveg: 3.0 }
 };
 
-// Calculate Carbon Emission
 const calculateEmission = (category, type, value) => {
   let emission = 0;
 
-  // Normalize inputs
   const cat = category.toLowerCase();
   const t = type ? type.toLowerCase() : 'default';
   const val = parseFloat(value);
@@ -72,15 +69,10 @@ const calculateEmission = (category, type, value) => {
       break;
     case 'food':
       if (CARBON_RATES.food[t]) {
-        // value is number of meals
         emission = val * CARBON_RATES.food[t];
       }
       break;
     case 'shopping':
-      // Basic assumption: 1kg CO2 per $10 spent or per item? 
-      // Requirement didn't specify shopping rate, assuming generic 2kg per item for now or 0.5 per various units.
-      // Let's use a generic multiplier as placeholder or maybe the user meant value as 'items'
-      // Taking a safe average for hackathon purpose: 2kg per 'unit' of shopping (e.g. 1 item)
       emission = val * 2.0;
       break;
     default:
@@ -92,16 +84,11 @@ const calculateEmission = (category, type, value) => {
 
 // Routes
 
-// GET /api/activities - Fetch all activities
 app.get('/api/activities', authenticateToken, async (req, res) => {
   try {
     const activities = await prisma.activity.findMany({
-      where: {
-        userId: req.user.userId
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
+      where: { userId: req.user.userId },
+      orderBy: { createdAt: 'desc' }
     });
     res.json(activities);
   } catch (error) {
@@ -109,7 +96,6 @@ app.get('/api/activities', authenticateToken, async (req, res) => {
   }
 });
 
-// POST /api/activities - Add new activity
 app.post('/api/activities', authenticateToken, async (req, res) => {
   const { category, type, value } = req.body;
 
@@ -136,23 +122,17 @@ app.post('/api/activities', authenticateToken, async (req, res) => {
   }
 });
 
-// GET /api/stats - (Optional helper) Get aggregated stats
 app.get('/api/stats', authenticateToken, async (req, res) => {
   try {
     const aggregations = await prisma.activity.aggregate({
       where: { userId: req.user.userId },
-      _sum: {
-        carbonEmission: true
-      }
+      _sum: { carbonEmission: true }
     });
 
-    // Group by category for charts
     const byCategory = await prisma.activity.groupBy({
       by: ['category'],
       where: { userId: req.user.userId },
-      _sum: {
-        carbonEmission: true
-      }
+      _sum: { carbonEmission: true }
     });
 
     res.json({
@@ -164,7 +144,6 @@ app.get('/api/stats', authenticateToken, async (req, res) => {
   }
 });
 
-
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
