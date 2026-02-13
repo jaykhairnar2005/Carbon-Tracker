@@ -15,7 +15,9 @@ const Login = () => {
         setError('');
         try {
             // const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-            const response = await fetch(`${API_BASE}/auth/login`, {
+            // Using hardcoded URL for debugging to ensure no config/env var issues
+            const HARDCODED_API = 'https://carbon-tracker-b4bf.onrender.com';
+            const response = await fetch(`${HARDCODED_API}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -68,7 +70,8 @@ const Login = () => {
                     <p className="text-gray-600">Don't have an account? <Link to="/register" className="text-nature-600 hover:underline">Register</Link></p>
                 </div>
                 <div className="mt-8 text-center text-xs text-gray-400">
-                    DEBUG: API connecting to: <span className="font-mono">{API_BASE}</span>
+                    <p>VERSION: V2-HARDCODED</p>
+                    <p>DEBUG: Forces connection to: <span className="font-mono">https://carbon-tracker-b4bf.onrender.com</span></p>
                 </div>
             </div>
         </div>
