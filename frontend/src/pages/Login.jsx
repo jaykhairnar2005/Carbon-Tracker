@@ -67,6 +67,9 @@ const Login = () => {
                 <div className="mt-4 text-center">
                     <p className="text-gray-600">Don't have an account? <Link to="/register" className="text-nature-600 hover:underline">Register</Link></p>
                 </div>
+                <div className="mt-8 text-center text-xs text-gray-400">
+                    DEBUG: API connecting to: <span className="font-mono">{API_BASE}</span>
+                </div>
             </div>
         </div>
     );
