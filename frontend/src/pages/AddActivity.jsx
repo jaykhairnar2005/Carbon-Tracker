@@ -37,7 +37,7 @@ const AddActivity = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:3000`;
+            const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
             await axios.post(`${API_BASE}/api/activities`, formData);
             navigate('/');
         } catch (error) {

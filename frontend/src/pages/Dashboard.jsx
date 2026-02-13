@@ -18,7 +18,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const API_BASE = import.meta.env.VITE_API_URL || `http://${window.location.hostname}:3000`;
+                const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
                 const res = await axios.get(`${API_BASE}/api/activities`);
                 setActivities(res.data);
                 const total = res.data.reduce((acc, curr) => acc + curr.carbonEmission, 0);
